@@ -1,1 +1,1 @@
-python build.py %*
+pipenv run python build.py %*
