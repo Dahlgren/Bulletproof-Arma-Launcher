@@ -1,0 +1,34 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  windows:
+    name: Windows
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 2.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 2.7
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Setup launcher config
+        run: |
+          copy src/launcher_config/config_select_sample.py src/launcher_config/config_select.py
+          copy src/launcher_config/launcher_configuration_sample.py src/launcher_config/launcher_configuration.py
+
+      - name: Build launcher
+        shell: cmd
+        run: build.bat
+
+      - name: Upload launcher binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: launcher
+          path: TB_Launcher.exe
